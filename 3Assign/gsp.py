@@ -354,9 +354,14 @@ def gsp_recursive(state, goal, openList): # return plan, new-state
                 while change:
                     for p in predList:
                         if not isInState(p, state1):
-                            plan1, state1 = gsp_recursive(state1, p, openList)
-                            plan.extend(plan1)
-                            break # changed, start over
+                            g = gsp_recursive(state1, p, openList)
+							if g:
+								plan1, state1 = g
+                            	plan.extend(plan1)
+                            	break # changed, start over
+							else:
+								# FIXME: better way to handle this.
+								return False
                     else:
                         change = False
                 # all solved, peace

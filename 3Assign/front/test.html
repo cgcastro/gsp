@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Goal Stack Planner</title>
+
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+		<meta name="author" content="Shantanu Gupta">
+
+		<!-- Link used for help with the layout :
+			http://www.csstutorial.net/2010/02/creating-a-basic-2-column-center-aligned-fixed-width-layout-with-css/
+		-->
+
+		<script src="boxgenerator.js"></script>
+		<script src="jquery.js"></script>	<!-- for AJAX	-->
+		<link rel="stylesheet" type="text/css" href="containers.css">
+		<link rel="stylesheet" type="text/css" href="boxes.css">
+
+	</head>
+	<body>
+		<div id="big-wrapper">
+			<h2> Goal stack planner for the blocks world domain</h2>
+
+			<div id="state-show">
+				<div id="current-state">
+				</div>
+				<div id="transition-buttons"> 
+					<button class="centered" name="prev-state-button">
+						Previous
+					</button>
+					<button class="centered" name="next-state-button">
+						Next
+					</button>
+				</div>
+			</div>
+			<div id="target-predicates">
+
+				<p>Enter valid Javascript expressions for each of the
+				initial and the desired goal predicates.</p>
+
+				<form id="state-info">
+					<input id="on-i" placeholder="On predicates (initial)">
+					<input id="on-d" placeholder="On predicates (desired)">
+					<br>
+					<input id="onTable-i" placeholder="On Table (initial)">
+					<input id="onTable-d" placeholder="On Table (desired)">
+					<br>
+					<input id="holding-i" placeholder="Holding (initial)">
+					<input id="holding-d" placeholder="Holding (desired)">
+					<br>
+					<input id="clear-i" placeholder="Clear (initial)">
+					<input id="clear-d" placeholder="Clear (desired)">
+					<br>
+					<input id="armEmpty-i" placeholder="armEmpty (initial)">
+					<input id="armEmpty-d" placeholder="armEmpty (desired)">
+					<br>
+					<input type="button" value="Submit"
+					onclick="sendState()">
+					<br>
+				</form>
+
+			</div>
+		</div>
+	</body>
+</html>

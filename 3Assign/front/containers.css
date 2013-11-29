@@ -1,0 +1,41 @@
+body {
+	font-family: cabin;
+}
+
+#big-wrapper {
+	background: white;
+	width: 1200px;
+	margin: 0 auto;
+}
+
+#state-show {
+	background: white;
+	height: 300px;
+	width: 800px;
+	margin: 0 auto;
+	float: center;
+	position: relative;
+}
+
+#current-state {
+	background: white;
+	color: white;
+	width: 300px; 
+	height: 100%;
+	margin: 0 auto;
+	float: center;
+	position: relative;
+}
+
+#transition-buttons {
+	margin: 20px auto;
+	text-align: center;
+}
+
+#target-predicates {
+	background: white;
+	text-align: center;
+	clear: both;
+	padding: 10px 0px;
+	margin: 50px 0px;
+}
