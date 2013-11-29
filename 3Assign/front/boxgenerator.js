@@ -136,7 +136,7 @@ function displayStateSequence(seq) {
 	var boxMap = getBoxMap(state, boxes);
 
 	displayBoxes(boxes, boxMap);
-	setTimeout(displayStateSequence(seq.slice(1,seq.length), delay);
+	setTimeout(displayStateSequence(seq.slice(1,seq.length), delay));
 }
 
 function sendState() {
