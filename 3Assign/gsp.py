@@ -148,6 +148,17 @@ def generateConjunct(preCondList, args):
     return tuple(['conjunct', c])
 
 
+def generate_and_set_blocks_list(state):
+    global blockList
+    bList = set()
+    on = state['on']
+    for t in on:
+        bList = bList.union(list(t))
+
+    bList = bList.union(state['onTable'] + state['holding'] + state['clear'])
+    blockList = list(bList)
+    return bList
+
 def plan_to_states_list(plan, start):
     out = []
     state = start
