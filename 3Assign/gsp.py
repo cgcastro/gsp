@@ -57,17 +57,17 @@ ss = {
     }
 """
 ss = {
-    'on': [('C', 'A')],
-    'onTable': ['A', 'B'],
-    'clear': ['C', 'B'],
+    'on': [('C', 'A'), ('A', 'B')],
+    'onTable': ['B'],
+    'clear': ['C'],
     'holding': [],
     'armEmpty': True
     }
 
 gg = {
-    'on': [ ('A', 'B'), ('B', 'C'),],
-    'onTable': ['C',],
-    'clear': [ 'A'],
+    'on': [],
+    'onTable': ['A', 'B', 'C',],
+    'clear': ['A', 'B', 'C'],
     'holding': [],
     'armEmpty': True
     }
@@ -148,6 +148,19 @@ def generateConjunct(preCondList, args):
     return tuple(['conjunct', c])
 
 
+def plan_to_states_list(plan, start):
+    out = []
+    state = start
+    s = conjunct_2_state(state)
+    out.append(s)
+    
+    for action in plan:
+        state = progress(state, action)
+        s = conjunct_2_state(state)
+        out.append(s)
+        
+    return out
+
 
 def progress(state, action):
     # sanity checks have been assumed
@@ -167,19 +180,15 @@ def progress(state, action):
             
     delete = actionStore[name]['D']
     for d in delete:
-        #print d
         if d[0] == 'on':
             currentState[d[0]].remove(tuple(args))
         elif d[0] == 'armEmpty':
-            #print "harami"
-            #print currentState, d[0], currentState[d[0]]
             currentState[d[0]] = False
-            #print currentState
         else:
             currentState[d[0]].remove(args[int(d[1][1])])
-    #print "##//////", currentState
+    
     return state_2_conjunct(currentState)        
-    #plan.append(action[1])
+    
 
 
 
@@ -192,13 +201,9 @@ def get_actions_for_predicate(pred):
     actions = []
     if name == 'on':
         actions = [('action', ('stack', args[0], args[1]))]
-        #precondList = actionStore['stack']['P']
-        #conjunct = generateConjunct(precondList, args)
     
     elif name == 'onTable':
         actions = [('action', ('putDown', args[0]))]
-        #precondList = actionStore['putDown']['P']
-        #conjunct = generateConjunct(precondList, args)
     
     elif name == 'clear':
         
@@ -291,8 +296,7 @@ def state_2_conjunct(state):
         o = ['armEmpty',]
         p.append(tuple(o))
         conjunct.append(tuple(p))
-    
-#    c = tuple(conjunct)
+
     return tuple(['conjunct', conjunct])
 
 def conjunct_2_state(conjunct):
@@ -317,10 +321,6 @@ def conjunct_2_state(conjunct):
             state['armEmpty'] = True
     return state
 
-def progress_plan(plan, state):
-    for action in plan:
-        progress(state, action)
-
 def gsp_recursive(state, goal, openList): # return plan, new-state
     global counter
     plan = []
@@ -342,7 +342,7 @@ def gsp_recursive(state, goal, openList): # return plan, new-state
                     plan1, state1 = g
                     plan.extend(plan1)
                 else: 
-                   # # print 'qq'
+
                    # # print goal
                     counter -= 1
                     print counter, '*<<<<<<<<<<<<<\n'
@@ -355,13 +355,13 @@ def gsp_recursive(state, goal, openList): # return plan, new-state
                     for p in predList:
                         if not isInState(p, state1):
                             g = gsp_recursive(state1, p, openList)
-							if g:
-								plan1, state1 = g
+                            if g:
+                                plan1, state1 = g
                             	plan.extend(plan1)
                             	break # changed, start over
-							else:
-								# FIXME: better way to handle this.
-								return False
+                            else:
+                                # we need a better way to handle this.
+                                return False
                     else:
                         change = False
                 # all solved, peace
@@ -408,74 +408,24 @@ def gsp_recursive(state, goal, openList): # return plan, new-state
                 name = a[1][0]
                 args = a[1][1:]
                 precondList = actionStore[name]['P']
-                ## print "eee"
-                ## print precondList
-                ## print goal
-                ## print args
                 conjunct = generateConjunct(precondList, args)
-                
-                #openList.append(a)
+
                 print a
                 print conjunct
                 print "___________"
                 g = gsp_recursive(state1, conjunct, openList)
-                # g = plan1, state1
-                #openList.remove(a)
                 if g: 
                     plan1, state1 = g
                     plan1.append(a)
-                    ## print "$$$$$$$$"
-                    ## print plan1
                     counter -= 1
                     print counter, '*<<<<<<<<<<<<<\n'
-                    #print state1
                     rr = plan1, progress(state1, a)
-                    #print "@@", rr[1], "||", a
+
                     return rr
                 else:
-                #    # print 'dd'
-                #    # print a
                     continue
             else:
                 counter -= 1
                 print counter, '*<<<<<<<<<<<<<\n'
                 return False
 
-
-#*************dump**
-
-def handle_conjuct(c):
-    preds = c[1] # predicates of the conjunct
-    for p in preds:
-        if not isInState(p):
-            pushal(c)
-            break
-
-def gsp():
-    while len(stack) != 0:
-        e = stack.pop()
-        if e[0] == 'action':
-            progress(e)
-        elif e[0] == 'predicate':
-            if not handle_predicate(e):
-                return False
-        else: # conjunct
-            handle_conjuct(e)
-    return True
-
-def pushal(conjunct):
-    stack.append(conjunct)
-    for p in conjunct[1]:
-        stack.append(p)
-
-predicateStore = {
-    'on' : {},
-    'onTable' : {},
-    'clear' : {},
-    'holding' : {},
-    'armEmpty' : {}
-    }
-
-
-stack = []
-plan = []
