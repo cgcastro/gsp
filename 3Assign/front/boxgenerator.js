@@ -126,7 +126,13 @@ function mainHandler() {
 
 function displayStateSequence(seq) {
 	if(seq.length == 0) return;
-	return;
+
+	var delay = 1500;	//	how much time a particular state shows up.
+	var state = JSON.parse(seq[0]);
+	var boxMap = getBoxMap(state, boxes);
+
+	displayBoxes(boxes, boxMap);
+	setTimeout(displayStateSequence, delay);
 }
 
 function sendState() {
