@@ -117,9 +117,7 @@ function getBoxMap(state, boxes) {
 
 function mainHandler() {
 	boxes = createBoxes();
-	var state = JSON.parse('{"on": [["C", "A"], ["A", "B"]], "clear": ["C", "D"], "holding": [], "onTable": ["B", "D"], "armEmpty": true}');
-	var boxMap = getBoxMap(state, boxes);
-	console.log(boxMap);
+	var boxMap = {};
 
 	displayBoxes(boxes, boxMap);
 }
@@ -160,6 +158,7 @@ function sendState() {
 		data: sentData,
 		success: function(result) {
 			result = JSON.parse(result);
+			console.log(result);
 			if(result == []) {
 				alert("No plan found! :-/");
 			}
