@@ -44,7 +44,7 @@ Action format:
 
 counter = 0
 
-blockList = ['A', 'B', 'C']
+blockList = ['A', 'B', 'C', 'D']
 #blockList = ['A', 'B']
 #blockList = ['A',]
 """
@@ -270,14 +270,7 @@ def check_all_solved(predList, state):
 # convert from state dict to a conjuct form
 def state_2_conjunct(state):
     conjunct = []
-    if state['on']:
-        for t in state['on']:
-            p = ['predicate',]
-            o = ['on',]
-            o.extend(t)
-            p.append(tuple(o))
-            conjunct.append(tuple(p))
-            
+    
     if state['onTable']:
         for t in state['onTable']:
             p = ['predicate',]
@@ -285,7 +278,7 @@ def state_2_conjunct(state):
             o.append(t)
             p.append(tuple(o))
             conjunct.append(tuple(p))
-            
+                    
     if state['clear']:
         for t in state['clear']:
             p = ['predicate',]
@@ -307,7 +300,16 @@ def state_2_conjunct(state):
         o = ['armEmpty',]
         p.append(tuple(o))
         conjunct.append(tuple(p))
-
+        
+    
+    if state['on']:
+        for t in state['on']:
+            p = ['predicate',]
+            o = ['on',]
+            o.extend(t)
+            p.append(tuple(o))
+            conjunct.append(tuple(p))
+    
     return tuple(['conjunct', conjunct])
 
 def conjunct_2_state(conjunct):

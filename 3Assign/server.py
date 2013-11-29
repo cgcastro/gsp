@@ -15,8 +15,8 @@ class MainHandler(tornado.web.RequestHandler):
         goal = dta['goal']
         s = gsp.state_2_conjunct(start)
         g = gsp.state_2_conjunct(goal)
-        #print "BLOCKSLIST", gsp.generate_and_set_blocks_list(start)
-        print gsp.blockList
+        print "BLOCKSLIST", gsp.generate_and_set_blocks_list(start)
+        #print gsp.blockList
         ps = gsp.gsp_recursive(s, g, [])
         states_list = None
         if ps:

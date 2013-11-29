@@ -73,6 +73,7 @@ function displayBoxes(boxes, boxMap) {
 	for(var i = 0; i < boxes.length; i++) {
 		for(var j = 0; j < boxes[i].length; j++) {
 			setBoxType(boxes[i][j], 'empty-box');
+			setBoxText(boxes[i][j], '');
 		}
 	}
 	for(var block in boxMap) {
@@ -114,7 +115,8 @@ function getBoxMap(state, boxes) {
 		}
 	}
 	if(state['holding'].length != 0) {
-		boxMap[state['holding'][0]]['div'] = holdingBox;
+	    boxMap[state['holding'][0]] = {};
+	    boxMap[state['holding'][0]]['div'] = holdingBox;
 	}
 
 	return boxMap;
@@ -123,7 +125,10 @@ function getBoxMap(state, boxes) {
 function mainHandler() {
 	boxes = createBoxes();
 	holdingBox = document.getElementById('holding-box');
-	var boxMap = {};
+    holdingBox.style.width = boxes[0][0].style.width
+    holdingBox.style.height = boxes[0][0].style.height
+
+    var boxMap = {};
 
 	displayBoxes(boxes, boxMap);
 }
@@ -135,8 +140,11 @@ function displayStateSequence(seq) {
 	var state = seq[0];
 	var boxMap = getBoxMap(state, boxes);
 
+	setBoxType(holdingBox, 'empty-box');
+	setBoxText(holdingBox, '');
+
 	displayBoxes(boxes, boxMap);
-	setTimeout(displayStateSequence(seq.slice(1,seq.length), delay));
+	setTimeout(function(){displayStateSequence(seq.slice(1,seq.length))}, delay);
 }
 
 function sendState() {
@@ -156,15 +164,13 @@ function sendState() {
 	
 	var localUrl = "http://localhost:4444/";
 	var sentData = {'start': initState, 'goal': desiredState};
-	console.log(JSON.stringify(sentData));
-
+	
 	$.ajax({
 		url: localUrl,
 		type: 'POST',
 		data: JSON.stringify(sentData),
 		success: function(result) {
 			result = JSON.parse(result);
-			console.log(result);
 			if(result == []) {
 				alert("No plan found! :-/");
 			}
