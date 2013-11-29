@@ -2,6 +2,7 @@
 //	blocks-world domain.
 
 boxes = [];
+var holdingBox;
 
 function getBox(boxWidth, className) {
 	//	Creates a box div : for blocks
@@ -112,11 +113,16 @@ function getBoxMap(state, boxes) {
 			}
 		}
 	}
+	if(state['holding'].length != 0) {
+		boxMap[state['holding'][0]]['div'] = holdingBox;
+	}
+
 	return boxMap;
 }
 
 function mainHandler() {
 	boxes = createBoxes();
+	holdingBox = document.getElementById('holding-box');
 	var boxMap = {};
 
 	displayBoxes(boxes, boxMap);
@@ -155,7 +161,7 @@ function sendState() {
 	$.ajax({
 		url: localUrl,
 		type: 'POST',
-		data: sentData,
+		data: JSON.stringify(sentData),
 		success: function(result) {
 			result = JSON.parse(result);
 			console.log(result);
