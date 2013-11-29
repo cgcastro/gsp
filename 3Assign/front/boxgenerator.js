@@ -128,11 +128,11 @@ function displayStateSequence(seq) {
 	if(seq.length == 0) return;
 
 	var delay = 1500;	//	how much time a particular state shows up.
-	var state = JSON.parse(seq[0]);
+	var state = seq[0];
 	var boxMap = getBoxMap(state, boxes);
 
 	displayBoxes(boxes, boxMap);
-	setTimeout(displayStateSequence, delay);
+	setTimeout(displayStateSequence(seq.slice(1,seq.length), delay);
 }
 
 function sendState() {
@@ -159,6 +159,10 @@ function sendState() {
 		type: 'POST',
 		data: sentData,
 		success: function(result) {
+			result = JSON.parse(result);
+			if(result == []) {
+				alert("No plan found! :-/");
+			}
 			displayStateSequence(result);
 		}
 	});
