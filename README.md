@@ -1,2 +1,2 @@
-pseudo
+Goal Stack Planning
 ======
